@@ -1,10 +1,52 @@
 <html>
 
 <body>
+    <h1>模拟相亲网站使用方法</h1>
     <p>
+        本模拟相亲网站可针对性响应原本发到第三方网站的请求。<br>
+        原本发送到类似http://www.zhenai.com/...的请求在本服务器/mock/www.zhanai.com/...被响应。<br>
+        响应的数据可被本课程原针对zhenai.com的爬虫爬取。
+    </p>
+    <h2>
         <span class="crawler-prompt">爬虫入口请设置为：</span>
         <a id="crawler-start" href="/static/citylist.html"></a>
+    </h2>
+    <p>
+        当然不要忘了我们在<a href="https://git.imooc.com/coding-180/coding-180/src/master/crawler/main.go#L28">main.go</a>
+        中配置正确的Parser。
     </p>
+    <p>
+        另需将原爬虫中的<a href="https://git.imooc.com/coding-180/coding-180/src/master/crawler/fetcher/fetcher.go">fetcher</a>
+        作相应修改，使得原来对http://www.zhenai.com(包括http://album.zhenai.com)的访问一率去到本服务器的/mock/***.zhenai.com/...
+    </p>
+    <p>
+        <li>例：http://www.zhenai.com/zhenghun/aomen --> http://localhost:8080/mock/www.zhenai.com/zhenghun/aomen</li>
+        <li>例：http://album.zhenai.com/u/9166010045394758737--> http://localhost:8080/mock/album.zhenai.com/u/9166010045394758737</li>
+    </p>
+    <p>
+        也就是所有url都要过下面的这个rewriteURL后再发出：
+        <textarea style="width: 100%; height: 30%;" readonly>
+            func rewriteURL(url string) string {
+                pre := "http://"
+                localhost := "http://localhost:8080"
+                if strings.HasPrefix(url, localhost) {
+                    return url
+                }
+                if strings.HasPrefix(url, pre) {
+                    return fmt.Sprintf("%s/mock/%s", localhost, url[len(pre):])
+                }
+                return url
+            }
+        </textarea>
+    </p>
+    <p>
+        具体修改示例可参考这个pull request: <a href="https://git.imooc.com/coding-180/coding-180/pulls/1/files">https://git.imooc.com/coding-180/coding-180/pulls/1/files</a>
+    </p>
+
+    <h3>
+        为了人工查看方便，特增加<a href="/static/citylist.html?rewrite=1">人工查看</a>入口，由服务器预先重写所有URL。
+        但课程源码中的各个parser需要修改后才可运行。
+    </h3>
     <script lang="text/javascript">
         let a = document.getElementById('crawler-start');
         a.text = a.href;

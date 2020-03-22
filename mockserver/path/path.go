@@ -58,7 +58,7 @@ func (w *responseWriter) Write(data []byte) (int, error) {
 }
 
 func (w *responseWriter) Flush() {
-	// no-op. Must flush via flush() once all bytes are received and re-written.
+	// no-op. Must flush via writeAndFlush() once all bytes are received and re-written.
 }
 
 func (w *responseWriter) writeAndFlush(data []byte) (int, error) {
