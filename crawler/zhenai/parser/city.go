@@ -9,9 +9,9 @@ import (
 
 var (
 	profileRe = regexp.MustCompile(
-		`<a href="(http://album.zhenai.com/u/[0-9]+)"[^>]*>([^<]+)</a>`)
+		`<a href="(.*album\.zhenai\.com/u/[0-9]+)"[^>]*>([^<]+)</a>`)
 	cityUrlRe = regexp.MustCompile(
-		`href="(http://www.zhenai.com/zhenghun/[^"]+)"`)
+		`href="(.*www\.zhenai\.com/zhenghun/[^"]+)"`)
 )
 
 func ParseCity(
