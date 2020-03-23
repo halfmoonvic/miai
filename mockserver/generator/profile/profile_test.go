@@ -10,10 +10,12 @@ import (
 	"imooc.com/ccmouse/learngo/crawler/engine"
 	"imooc.com/ccmouse/learngo/crawler/model"
 	"imooc.com/ccmouse/learngo/crawler/zhenai/parser"
+	"imooc.com/ccmouse/learngo/mockserver/config"
 	"imooc.com/ccmouse/learngo/mockserver/recommendation"
 )
 
 func TestGenerate(t *testing.T) {
+	config.ServerAddress = "localhost:8080"
 	g := Generator{
 		Tmpl:           template.Must(template.ParseFiles("profile_tmpl.html")),
 		Recommendation: recommendation.Client{},
@@ -28,7 +30,7 @@ func TestGenerate(t *testing.T) {
 	}
 
 	want := engine.Item{
-		Url:  "http://album.zhenai.com/u/12345",
+		Url:  "http://localhost:8080/mock/album.zhenai.com/u/12345",
 		Type: "zhenai",
 		Id:   "12345",
 		Payload: model.Profile{
@@ -47,7 +49,7 @@ func TestGenerate(t *testing.T) {
 			Car:        "有豪车",
 		},
 	}
-	r := parser.NewProfileParser("逍遥べ无痕病娇").Parse(b.Bytes(), "http://album.zhenai.com/u/12345")
+	r := parser.NewProfileParser("逍遥べ无痕病娇").Parse(b.Bytes(), "http://localhost:8080/mock/album.zhenai.com/u/12345")
 	if len(r.Items) != 1 {
 		t.Errorf("want exactly 1 element, got %d items: %v", len(r.Items), r.Items)
 	} else {
@@ -63,12 +65,12 @@ func TestGenerate(t *testing.T) {
 	}
 	wantReq := []reqData{
 		{
-			URL:    "http://album.zhenai.com/u/12335",
+			URL:    "http://localhost:8080/mock/album.zhenai.com/u/12335",
 			Parser: "ParseProfile",
 			Arg:    "酒虑肉嘟嘟",
 		},
 		{
-			URL:    "http://album.zhenai.com/u/12340",
+			URL:    "http://localhost:8080/mock/album.zhenai.com/u/12340",
 			Parser: "ParseProfile",
 			Arg:    "称霸全服胆小鬼",
 		},

@@ -13,6 +13,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"imooc.com/ccmouse/learngo/mockserver/config"
 	"imooc.com/ccmouse/learngo/mockserver/generator/profile"
 )
 
@@ -72,7 +73,7 @@ func (g *Generator) generate(p params, w io.Writer) error {
 		items[i] = ContentItem{
 			ID:      id,
 			Profile: p,
-			URL:     fmt.Sprintf("http://album.zhenai.com/u/%d", id),
+			URL:     fmt.Sprintf("http://%s/mock/album.zhenai.com/u/%d", config.ServerAddress, id),
 		}
 	}
 
@@ -84,7 +85,7 @@ func (g *Generator) generate(p params, w io.Writer) error {
 		}
 		url := ""
 		if targetPage != p.Page {
-			url = fmt.Sprintf("http://www.zhenai.com/zhenghun/%s/%d", p.City, targetPage)
+			url = fmt.Sprintf("http://%s/mock/www.zhenai.com/zhenghun/%s/%d", config.ServerAddress, p.City, targetPage)
 		}
 		pages = append(pages, PageItem{
 			URL:  url,

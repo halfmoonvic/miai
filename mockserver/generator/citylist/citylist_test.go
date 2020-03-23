@@ -1,4 +1,4 @@
-package city
+package citylist
 
 import (
 	"bytes"
@@ -7,33 +7,24 @@ import (
 
 	"imooc.com/ccmouse/learngo/crawler/zhenai/parser"
 	"imooc.com/ccmouse/learngo/mockserver/config"
-	"imooc.com/ccmouse/learngo/mockserver/generator/profile"
 )
 
 func TestGenerate(t *testing.T) {
 	config.ServerAddress = "localhost:8080"
-	pg := &profile.Generator{Tmpl: template.Must(template.ParseFiles("../profile/profile_tmpl.html"))}
 	g := Generator{
-		Tmpl:       template.Must(template.ParseFiles("city_tmpl.html")),
-		ProfileGen: pg,
+		Tmpl: template.Must(template.ParseFiles("citylist_tmpl.html")),
 	}
 
 	var b bytes.Buffer
-	err := g.generate(params{
-		City: "fuxin",
-		Page: 34,
-	}, &b)
+	err := g.generate(&b)
 
 	if err != nil {
 		t.Fatalf("Cannot generate content: %v.", err)
 	}
 
-	r := parser.ParseCity(b.Bytes(), "")
+	r := parser.ParseCityList(b.Bytes(), "")
 
-	wantItems, wantRequests := 0, 24
-	if len(r.Items) != wantItems {
-		t.Errorf("generate() want %d items, got %d: %v", wantItems, len(r.Items), r.Items)
-	}
+	wantRequests := 470
 
 	if len(r.Requests) != wantRequests {
 		t.Errorf("generate() want %d requests, got %d: %v", wantRequests, len(r.Requests), r.Requests)
@@ -47,13 +38,17 @@ func TestGenerate(t *testing.T) {
 	}{
 		{
 			i:          0,
-			wantURL:    "http://localhost:8080/mock/album.zhenai.com/u/484971159322053275",
-			wantParser: "ParseProfile",
-			wantArg:    "与你度余生迁就",
+			wantURL:    "http://localhost:8080/mock/www.zhenai.com/zhenghun/aba",
+			wantParser: "ParseCity",
 		},
 		{
 			i:          23,
-			wantURL:    "http://localhost:8080/mock/www.zhenai.com/zhenghun/fuxin/37",
+			wantURL:    "http://localhost:8080/mock/www.zhenai.com/zhenghun/baotou",
+			wantParser: "ParseCity",
+		},
+		{
+			i:          469,
+			wantURL:    "http://localhost:8080/mock/www.zhenai.com/zhenghun/zunyi",
 			wantParser: "ParseCity",
 		},
 	}

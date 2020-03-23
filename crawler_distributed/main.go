@@ -13,7 +13,7 @@ import (
 	"imooc.com/ccmouse/learngo/crawler/config"
 	"imooc.com/ccmouse/learngo/crawler/engine"
 	"imooc.com/ccmouse/learngo/crawler/scheduler"
-	"imooc.com/ccmouse/learngo/crawler/xcar/parser"
+	"imooc.com/ccmouse/learngo/crawler/zhenai/parser"
 	itemsaver "imooc.com/ccmouse/learngo/crawler_distributed/persist/client"
 	"imooc.com/ccmouse/learngo/crawler_distributed/rpcsupport"
 	worker "imooc.com/ccmouse/learngo/crawler_distributed/worker/client"
@@ -53,10 +53,10 @@ func main() {
 	}
 
 	e.Run(engine.Request{
-		Url: "http://www.starter.url.here",
+		Url: "http://localhost:8080/mock/www.zhenai.com/zhenghun",
 		Parser: engine.NewFuncParser(
-			parser.ParseCarList,
-			config.ParseCarList),
+			parser.ParseCityList,
+			config.ParseCityList),
 	})
 }
 

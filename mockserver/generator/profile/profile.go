@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"imooc.com/ccmouse/learngo/crawler/model"
+	"imooc.com/ccmouse/learngo/mockserver/config"
 )
 
 // Recommendation defines the interface for recommendation subsystem.
@@ -46,13 +47,14 @@ func (g *Generator) HandleRequest(c *gin.Context) {
 
 // GuessListItem defines guess list item bound into html template.
 type GuessListItem struct {
-	ID       int64
+	URL      string
 	Name     string
 	PhotoURL string
 }
 
 // PhotoProfile defiens profile with photo bound into html template.
 type PhotoProfile struct {
+	// Embed a *model.Profile here to save typing in template.
 	*model.Profile
 	PhotoURL string
 }
@@ -71,7 +73,7 @@ func (g *Generator) generate(id int64, w io.Writer) error {
 		guessItems = make([]GuessListItem, len(guesses))
 		for i, v := range guesses {
 			gp := g.GenerateProfile(v)
-			guessItems[i].ID = v
+			guessItems[i].URL = fmt.Sprintf("http://%s/mock/album.zhenai.com/u/%d", config.ServerAddress, v)
 			guessItems[i].Name = gp.Name
 			guessItems[i].PhotoURL = gp.PhotoURL
 		}
@@ -85,10 +87,6 @@ func (g *Generator) generate(id int64, w io.Writer) error {
 // GenerateProfile generates a photo profile given a user id.
 func (g *Generator) GenerateProfile(id int64) *PhotoProfile {
 	r := rand.New(rand.NewSource(id))
-	return generateProfile(r, rand.Intn(5))
-}
-
-func generateProfile(r *rand.Rand, guessCount int) *PhotoProfile {
 	n1 := elementFromSlice(r, []string{
 		"断念",
 		"街痞",

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"math/rand"
@@ -9,16 +8,14 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"imooc.com/ccmouse/learngo/mockserver/config"
 	"imooc.com/ccmouse/learngo/mockserver/generator/city"
+	"imooc.com/ccmouse/learngo/mockserver/generator/citylist"
 	"imooc.com/ccmouse/learngo/mockserver/generator/profile"
-	"imooc.com/ccmouse/learngo/mockserver/path"
 	"imooc.com/ccmouse/learngo/mockserver/recommendation"
 )
 
-const (
-	templateSuggestion = "Please make sure working directory is the root of the repository, where we have go.mod/go.sum. Suggested command line: go run mockserver/main.go"
-	port               = 8080
-)
+const templateSuggestion = "Please make sure working directory is the root of the repository, where we have go.mod/go.sum. Suggested command line: go run mockserver/main.go"
 
 func main() {
 	profileTemplate, err := template.ParseFiles("mockserver/generator/profile/profile_tmpl.html")
@@ -39,16 +36,24 @@ func main() {
 		ProfileGen: profileGen,
 	}
 
+	cityListTemplate, err := template.ParseFiles("mockServer/generator/citylist/citylist_tmpl.html")
+	if err != nil {
+		log.Fatalf("Cannot create citylist template: %v. %s", err, templateSuggestion)
+	}
+	cityListGen := &citylist.Generator{
+		Tmpl: cityListTemplate,
+	}
+
 	rand.Seed(time.Now().Unix())
 	r := gin.Default()
-	r.Use(path.Rewrite)
 	r.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusTemporaryRedirect, "/static/index.html")
 	})
 	r.Static("/static", "mockserver/static")
+	r.GET("mock/www.zhenai.com/zhenghun", cityListGen.HandleRequest)
 	r.GET("mock/www.zhenai.com/zhenghun/:city/:page", cityGen.HandleRequest)
 	r.GET("mock/www.zhenai.com/zhenghun/:city", cityGen.HandleRequest)
 	r.GET("mock/album.zhenai.com/u/:id", profileGen.HandleRequest)
 
-	log.Fatal(r.Run(fmt.Sprintf(":%d", port)))
+	log.Fatal(r.Run(config.ServerAddress))
 }

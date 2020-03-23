@@ -5,7 +5,7 @@ import (
 	"imooc.com/ccmouse/learngo/crawler/engine"
 	"imooc.com/ccmouse/learngo/crawler/persist"
 	"imooc.com/ccmouse/learngo/crawler/scheduler"
-	"imooc.com/ccmouse/learngo/crawler/xcar/parser"
+	"imooc.com/ccmouse/learngo/crawler/zhenai/parser"
 )
 
 func main() {
@@ -23,9 +23,9 @@ func main() {
 	}
 
 	e.Run(engine.Request{
-		Url: "http://www.starter.url.here",
+		Url: "http://localhost:8080/mock/www.zhenai.com/zhenghun",
 		Parser: engine.NewFuncParser(
-			parser.ParseCarList,
-			config.ParseCarList),
+			parser.ParseCityList,
+			config.ParseCityList),
 	})
 }
