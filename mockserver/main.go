@@ -27,7 +27,7 @@ func main() {
 		Recommendation: recommendation.Client{},
 	}
 
-	cityTemplate, err := template.ParseFiles("mockServer/generator/city/city_tmpl.html")
+	cityTemplate, err := template.ParseFiles("mockserver/generator/city/city_tmpl.html")
 	if err != nil {
 		log.Fatalf("Cannot create city template: %v. %s", err, templateSuggestion)
 	}
@@ -36,7 +36,7 @@ func main() {
 		ProfileGen: profileGen,
 	}
 
-	cityListTemplate, err := template.ParseFiles("mockServer/generator/citylist/citylist_tmpl.html")
+	cityListTemplate, err := template.ParseFiles("mockserver/generator/citylist/citylist_tmpl.html")
 	if err != nil {
 		log.Fatalf("Cannot create citylist template: %v. %s", err, templateSuggestion)
 	}
