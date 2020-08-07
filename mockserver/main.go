@@ -55,5 +55,5 @@ func main() {
 	r.GET("mock/www.zhenai.com/zhenghun/:city", cityGen.HandleRequest)
 	r.GET("mock/album.zhenai.com/u/:id", profileGen.HandleRequest)
 
-	log.Fatal(r.Run(config.ServerAddress))
+	log.Fatal(r.Run(config.ListenAddress))
 }
