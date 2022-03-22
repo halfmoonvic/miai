@@ -7,8 +7,8 @@ var (
 	// 所以增加ServerAddress配置，所有的链接都使用形式：
 	// http://<ServerAddress>/mock/album.zhenai.com/<相对路径>
 	// 若将服务器部署在云，我们需要把这里替换成外网ip/域名:8080
-	ServerAddress = "localhost:8080"
+	ServerAddress = "localhost:8888"
 
 	// ListenAddress configures where the server listens at.
-	ListenAddress = ":8080"
+	ListenAddress = ":8888"
 )
